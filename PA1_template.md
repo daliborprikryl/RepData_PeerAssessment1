@@ -1,16 +1,31 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r,echo=TRUE,results="hide"}
+
+```r
 # Step0:Load packages
 library(dplyr);library(lattice)
+```
 
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 # Step1:Download activity data
 setwd("C:/Users/dalib_000/Desktop/Coursera/2.Data Science Specialization/5.Reproducible Research")
 fileUrl <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip"
@@ -28,7 +43,8 @@ mydata <- myimport [which(myimport$steps!= "NA"), ]
 
 ## What is mean total number of steps taken per day?
 
-```{r,echo=TRUE,results="hide"}
+
+```r
 # Step3: Creates histogram of total steps by date
 myplot1 <- mydata %>% group_by(date) %>% summarise(Steps=sum(steps))
 png("plot1.png", width=480, height=480, units="px")
@@ -42,7 +58,8 @@ median_of_steps <- median(myplot1$Steps)
 
 ## What is the average daily activity pattern?
 
-```{r,echo=TRUE,results="hide"}
+
+```r
 # Step5: Creates plot of average number of steps taken in PNG format
 myplot2 <- mydata %>% group_by(interval) %>% summarise(Steps=mean(steps))
 png("plot2.png", width=480, height=480, units="px") 
@@ -51,10 +68,10 @@ dev.off()
 
 # Step6: Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 int_w_max_of_steps <- select(filter(myplot2,Steps==max(Steps)),interval)
-
 ```
 ## Imputing missing values
-```{r,echo=TRUE,results="hide"}
+
+```r
 # Step7:Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 count_of_na <- sum(is.na(myimport$steps))
 
@@ -75,14 +92,14 @@ dev.off()
 
 mean_of_steps <- mean(myplot3$Steps)
 median_of_steps <- median(myplot3$Steps)
-
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r,echo=TRUE,results="hide"}
+
+```r
 MD <- mutate(MD,myweekdays=weekdays(as.Date(MD$date)))
-MD <- mutate(MD,myweekdayssplit=ifelse(MD$myweekdays %in% c("sobota", "nedìle"),"weekend", "weekday"))
+MD <- mutate(MD,myweekdayssplit=ifelse(MD$myweekdays %in% c("sobota", "nedÄ›le"),"weekend", "weekday"))
 myplot4 <- MD %>% group_by(interval,myweekdayssplit) %>% summarise(Steps=mean(steps))
 png("plot4.png", width=480, height=480, units="px")
 xyplot(Steps ~ interval | myweekdayssplit, data = myplot4, layout = c(1, 2), type="l")	
